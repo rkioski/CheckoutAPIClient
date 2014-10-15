@@ -1,5 +1,5 @@
 {
-    "name": "rkioski/checkout_finland_api_client",
+    "name": "rkioski/checkout-finland-api-client",
     "description": "API client for the payment gateway of Checkout Finland Oy.",
     "minimum-stability": "dev",
     "keywords": ["Checkout Finland", "payment gateway", "api"],
