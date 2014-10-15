@@ -1,0 +1,8 @@
+formatter.name: pretty
+
+suites:
+    CheckoutFinland:
+        namespace: CheckoutFinland
+        spec_prefix: Spec
+        src_path: 'src'
+        spec_path: 'tests'

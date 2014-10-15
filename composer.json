@@ -1,0 +1,25 @@
+{
+    "name": "roachsystems/checkout_finland_api_client",
+    "description": "API client for the payment gateway of Checkout Finland Oy.",
+    "minimum-stability": "dev",
+    "keywords": ["Checkout Finland", "payment gateway", "api"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matti Särkikoski",
+            "email": "rkioski@gmail.com",
+            "homepage": "https://github.com/rkioski"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "guzzlehttp/guzzle": "5.0.0",
+        "phpspec/phpspec": "2.0.1"
+
+    },
+    "autoload": {
+        "psr-4": {
+            "CheckoutFinland\\": "src/CheckoutFinland"
+        }
+    }
+}
