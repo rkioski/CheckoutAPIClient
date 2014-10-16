@@ -126,7 +126,7 @@ class Response
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMerchantSecret()
     {
@@ -134,7 +134,7 @@ class Response
     }
 
     /**
-     * @param mixed $merchant_secret
+     * @param string $merchant_secret
      */
     public function setMerchantSecret($merchant_secret)
     {
@@ -142,7 +142,7 @@ class Response
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getPayment()
     {
@@ -150,7 +150,7 @@ class Response
     }
 
     /**
-     * @param mixed $payment
+     * @param string $payment
      */
     public function setPayment($payment)
     {
@@ -158,7 +158,7 @@ class Response
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getReference()
     {
@@ -166,7 +166,7 @@ class Response
     }
 
     /**
-     * @param mixed $reference
+     * @param string $reference
      */
     public function setReference($reference)
     {
@@ -174,7 +174,7 @@ class Response
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getStamp()
     {
@@ -182,7 +182,7 @@ class Response
     }
 
     /**
-     * @param mixed $stamp
+     * @param string $stamp
      */
     public function setStamp($stamp)
     {
@@ -190,7 +190,7 @@ class Response
     }
 
     /**
-     * @return mixed
+     * @return int
      */
     public function getStatus()
     {
@@ -198,7 +198,7 @@ class Response
     }
 
     /**
-     * @param mixed $status
+     * @param int $status
      */
     public function setStatus($status)
     {
@@ -206,7 +206,7 @@ class Response
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getVersion()
     {
@@ -214,10 +214,12 @@ class Response
     }
 
     /**
-     * @param mixed $version
+     * @param string $version
      */
     public function setVersion($version)
     {
         $this->version = $version;
     }
+
+
 }

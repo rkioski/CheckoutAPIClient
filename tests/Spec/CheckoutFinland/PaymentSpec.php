@@ -54,4 +54,27 @@ class PaymentSpec extends ObjectBehavior
         $this->setCustomerData($first_name, $family_name, $address, $postcode, $post_office, $country, $language);
     }
 
+    function it_can_store_all_data_from_single_array()
+    {
+        $payment_data = [
+            'stamp'             => '1245132',
+            'amount'            => '1000',
+            'reference'         => '12344',
+            'message'           => 'Nuts and bolts',
+            'delivery_date'     => new \DateTime('2014-12-31'),
+            'first_name'        => 'John',
+            'family_name'       => 'Doe',
+            'address'           => 'Some street 13 B 2',
+            'postcode'          => '33100',
+            'post_office'       => 'Some city',
+            'country'           => 'FIN',
+            'language'          => 'EN'
+        ];
+
+        $this->setData($payment_data);
+
+        $this->getReference()->shouldBe('12344');
+        $this->getPostOffice()->shouldBe('Some city');
+    }
+
 }
