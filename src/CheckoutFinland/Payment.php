@@ -17,11 +17,11 @@ class Payment
     /**
      * @var string Merchant id (AN 20)
      */
-    protected $merchant_id;
+    protected $merchantId;
     /**
      * @var string Secret merchant key
      */
-    protected $merchant_secret;
+    protected $merchantSecret;
 
     /**
      * @var string Payment version, currently always '0001' (AN 4)
@@ -51,19 +51,19 @@ class Payment
     /**
      * @var string Url called when returning successfully (AN 300)
      */
-    protected $return_url;
+    protected $returnUrl;
     /**
      * @var string Url called when user cancelled payment (AN 300)
      */
-    protected $cancel_url;
+    protected $cancelUrl;
     /**
      * @var string Url called when payment was rejected (No credit on credit card etc) (AN 300)
      */
-    protected $reject_url;
+    protected $rejectUrl;
     /**
      * @var string Url called when payment is initially successful but not yet confirmed (AN 300)
      */
-    protected $delayed_url;
+    protected $delayedUrl;
 
     /**
      * @var string Country of the buyer, affects available payment methods (AN 3)
@@ -93,15 +93,15 @@ class Payment
     /**
      * @var \DateTime Expected delivery date (N 8) (Ymd)
      */
-    protected $delivery_date;
+    protected $deliveryDate;
     /**
      * @var string First name of customer (AN 40)
      */
-    protected $first_name;
+    protected $firstName;
     /**
      * @var string Last name of customer (AN 40)
      */
-    protected $family_name;
+    protected $familyName;
     /**
      * @var string Street address of customer (AN 40)
      */
@@ -113,24 +113,24 @@ class Payment
     /**
      * @var string Post office of customer (AN 18)
      */
-    protected $post_office;
+    protected $postOffice;
 
     /**
      * @var bool If true overrides the minimum allowed amount check (by default 1€ is smallest allowed amount). Do not set to true unless you have a contract with Checkout Finland that allows smaller purchases then 1€.
      */
-    private $allow_small_purchases;
+    private $allowSmallPurchases;
 
     /**
-     * @param $merchant_id
-     * @param $merchant_secret
-     * @param $allow_small_purchases
+     * @param $merchantId
+     * @param $merchantSecret
+     * @param $allowSmallPurchases
      */
-    public function __construct($merchant_id, $merchant_secret, $allow_small_purchases = false)
+    public function __construct($merchantId, $merchantSecret, $allowSmallPurchases = false)
     {
-        $this->merchant_id      = $merchant_id;
-        $this->merchant_secret  = $merchant_secret;
+        $this->merchantId      = $merchantId;
+        $this->merchantSecret  = $merchantSecret;
 
-        $this->allow_small_purchases = $allow_small_purchases;
+        $this->allowSmallPurchases = $allowSmallPurchases;
 
         $this->setDefaultValues();
     }
@@ -152,55 +152,55 @@ class Payment
      * @param $amount
      * @param $reference
      * @param $message
-     * @param \DateTime $delivery_date
+     * @param \DateTime $deliveryDate
      */
-    public function setOrderData($stamp, $amount, $reference, $message, \DateTime $delivery_date)
+    public function setOrderData($stamp, $amount, $reference, $message, \DateTime $deliveryDate)
     {
-        $this->stamp            = $stamp;
-        $this->amount           = $amount;
-        $this->reference        = $reference;
-        $this->message          = $message;
-        $this->delivery_date    = $delivery_date;
+        $this->setStamp($stamp);
+        $this->setAmount($amount);
+        $this->setReference($reference);
+        $this->setMessage($message);
+        $this->setDeliveryDate($deliveryDate);
     }
 
     /**
      * Sets customer information
      *
-     * @param $first_name
-     * @param $family_name
+     * @param $firstName
+     * @param $familyName
      * @param $address
      * @param $postcode
-     * @param $post_office
+     * @param $postOffice
      * @param $country
      * @param $language
      */
-    public function setCustomerData($first_name, $family_name, $address, $postcode, $post_office, $country, $language)
+    public function setCustomerData($firstName, $familyName, $address, $postcode, $postOffice, $country, $language)
     {
-        $this->first_name   = $first_name;
-        $this->family_name  = $family_name;
-        $this->address      = $address;
-        $this->postcode     = $postcode;
-        $this->post_office  = $post_office;
-        $this->country      = $country;
-        $this->language     = $language;
+        $this->setFirstName($firstName);
+        $this->setFamilyName($familyName);
+        $this->setAddress($address);
+        $this->setPostcode($postcode);
+        $this->setPostOffice($postOffice);
+        $this->setCountry($country);
+        $this->setLanguage($language);
     }
 
     /**
      * Sets multiple variables at once
      *
      * $example_data =  [
-     *   'stamp'             => '1245132',
-     *   'amount'            => '1000',
-     *   'reference'         => '12344',
-     *   'message'           => 'Nuts and bolts',
-     *   'delivery_date'     => new \DateTime('2014-12-31'),
-     *   'first_name'        => 'John',
-     *   'family_name'       => 'Doe',
-     *   'address'           => 'Some street 13 B 2',
-     *   'postcode'          => '33100',
-     *   'post_office'       => 'Some city',
-     *   'country'           => 'FIN',
-     *   'language'          => 'EN'
+     *   'stamp'            => '1245132',
+     *   'amount'           => '1000',
+     *   'reference'        => '12344',
+     *   'message'          => 'Nuts and bolts',
+     *   'deliveryDate'     => new \DateTime('2014-12-31'),
+     *   'firstName'        => 'John',
+     *   'familyName'       => 'Doe',
+     *   'address'          => 'Some street 13 B 2',
+     *   'postcode'         => '33100',
+     *   'postOffice'       => 'Some city',
+     *   'country'          => 'FIN',
+     *   'language'         => 'EN'
      *   ];
      *
      * @param array $params
@@ -209,8 +209,10 @@ class Payment
     {
         foreach($params as $key => $value)
         {
-            if(property_exists($this, $key)) {
-                $this->$key = $value;
+            $setter_name = "set".ucfirst($key);
+            
+            if(method_exists($this, $setter_name)) {
+                $this->$setter_name($value);
             }
         }
     }
@@ -266,7 +268,7 @@ class Payment
         if(strlen($amount) > 8 )
             throw new AmountTooLargeException($amount ." is too large.");
 
-        if($this->allow_small_purchases == false and $amount < 100)
+        if($this->allowSmallPurchases == false and $amount < 100)
             throw new AmountUnderMinimumException("1€ is the minimum allowed amount.");
 
         $this->amount = $amount;
@@ -277,20 +279,20 @@ class Payment
      */
     public function getCancelUrl()
     {
-        return $this->cancel_url;
+        return $this->cancelUrl;
     }
 
     /**
-     * @param string $cancel_url
+     * @param string $cancelUrl
      * @throws UrlTooLongException
      */
-    public function setCancelUrl($cancel_url)
+    public function setCancelUrl($cancelUrl)
     {
 
-        if(strlen($cancel_url) > 300)
+        if(strlen($cancelUrl) > 300)
             throw new UrlTooLongException('Max url length is 300 characters');
 
-        $this->cancel_url = $cancel_url;
+        $this->cancelUrl = $cancelUrl;
     }
 
     /**
@@ -350,19 +352,19 @@ class Payment
      */
     public function getDelayedUrl()
     {
-        return $this->delayed_url;
+        return $this->delayedUrl;
     }
 
     /**
-     * @param string $delayed_url
+     * @param string $delayedUrl
      * @throws UrlTooLongException
      */
-    public function setDelayedUrl($delayed_url)
+    public function setDelayedUrl($delayedUrl)
     {
-        if(strlen($delayed_url) > 300)
+        if(strlen($delayedUrl) > 300)
             throw new UrlTooLongException('Max url length is 300 characters');
 
-        $this->delayed_url = $delayed_url;
+        $this->delayedUrl = $delayedUrl;
     }
 
     /**
@@ -370,15 +372,15 @@ class Payment
      */
     public function getDeliveryDate()
     {
-        return $this->delivery_date;
+        return $this->deliveryDate;
     }
 
     /**
-     * @param \DateTime $delivery_date
+     * @param \DateTime $deliveryDate
      */
-    public function setDeliveryDate(\DateTime $delivery_date)
+    public function setDeliveryDate(\DateTime $deliveryDate)
     {
-        $this->delivery_date = $delivery_date;
+        $this->deliveryDate = $deliveryDate;
     }
 
     /**
@@ -402,15 +404,15 @@ class Payment
      */
     public function getFamilyName()
     {
-        return $this->family_name;
+        return $this->familyName;
     }
 
     /**
-     * @param string $family_name
+     * @param string $familyName
      */
-    public function setFamilyName($family_name)
+    public function setFamilyName($familyName)
     {
-        $this->family_name = substr($family_name, 0, 40);
+        $this->familyName = substr($familyName, 0, 40);
     }
 
     /**
@@ -418,15 +420,15 @@ class Payment
      */
     public function getFirstName()
     {
-        return $this->first_name;
+        return $this->firstName;
     }
 
     /**
-     * @param string $first_name
+     * @param string $firstName
      */
-    public function setFirstName($first_name)
+    public function setFirstName($firstName)
     {
-        $this->first_name = substr($first_name, 0, 40);
+        $this->firstName = substr($firstName, 0, 40);
     }
 
     /**
@@ -450,19 +452,19 @@ class Payment
      */
     public function getMerchantId()
     {
-        return $this->merchant_id;
+        return $this->merchantId;
     }
 
     /**
-     * @param string $merchant_id
+     * @param string $merchantId
      * @throws VariableTooLongException
      */
-    public function setMerchantId($merchant_id)
+    public function setMerchantId($merchantId)
     {
-        if(strlen($merchant_id) > 20 )
-            throw new VariableTooLongException("Merchant id: $merchant_id too long, max length is 20 characters");
+        if(strlen($merchantId) > 20 )
+            throw new VariableTooLongException("Merchant id: $merchantId too long, max length is 20 characters");
 
-        $this->merchant_id = $merchant_id;
+        $this->merchantId = $merchantId;
     }
 
     /**
@@ -470,15 +472,15 @@ class Payment
      */
     public function getMerchantSecret()
     {
-        return $this->merchant_secret;
+        return $this->merchantSecret;
     }
 
     /**
-     * @param string $merchant_secret
+     * @param string $merchantSecret
      */
-    public function setMerchantSecret($merchant_secret)
+    public function setMerchantSecret($merchantSecret)
     {
-        $this->merchant_secret = $merchant_secret;
+        $this->merchantSecret = $merchantSecret;
     }
 
     /**
@@ -502,15 +504,15 @@ class Payment
      */
     public function getPostOffice()
     {
-        return $this->post_office;
+        return $this->postOffice;
     }
 
     /**
-     * @param string $post_office
+     * @param string $postOffice
      */
-    public function setPostOffice($post_office)
+    public function setPostOffice($postOffice)
     {
-        $this->post_office = substr($post_office, 0, 18);
+        $this->postOffice = substr($postOffice, 0, 18);
     }
 
     /**
@@ -554,19 +556,19 @@ class Payment
      */
     public function getRejectUrl()
     {
-        return $this->reject_url;
+        return $this->rejectUrl;
     }
 
     /**
-     * @param string $reject_url
+     * @param string $rejectUrl
      * @throws UrlTooLongException
      */
-    public function setRejectUrl($reject_url)
+    public function setRejectUrl($rejectUrl)
     {
-        if(strlen($reject_url) > 300)
+        if(strlen($rejectUrl) > 300)
             throw new UrlTooLongException('Max url length is 300 characters');
 
-        $this->reject_url = $reject_url;
+        $this->rejectUrl = $rejectUrl;
     }
 
     /**
@@ -574,19 +576,19 @@ class Payment
      */
     public function getReturnUrl()
     {
-        return $this->return_url;
+        return $this->returnUrl;
     }
 
     /**
-     * @param string $return_url
+     * @param string $returnUrl
      * @throws UrlTooLongException
      */
-    public function setReturnUrl($return_url)
+    public function setReturnUrl($returnUrl)
     {
-        if(strlen($return_url) > 300)
+        if(strlen($returnUrl) > 300)
             throw new UrlTooLongException('Max url length is 300 characters');
 
-        $this->return_url = $return_url;
+        $this->returnUrl = $returnUrl;
     }
 
     /**

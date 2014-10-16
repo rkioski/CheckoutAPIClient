@@ -61,12 +61,12 @@ class PaymentSpec extends ObjectBehavior
             'amount'            => '1000',
             'reference'         => '12344',
             'message'           => 'Nuts and bolts',
-            'delivery_date'     => new \DateTime('2014-12-31'),
-            'first_name'        => 'John',
-            'family_name'       => 'Doe',
+            'deliveryDate'      => new \DateTime('2014-12-31'),
+            'firstName'         => 'John',
+            'familyName'        => 'Doe',
             'address'           => 'Some street 13 B 2',
             'postcode'          => '33100',
-            'post_office'       => 'Some city',
+            'postOffice'        => 'Some city',
             'country'           => 'FIN',
             'language'          => 'EN'
         ];
@@ -116,6 +116,11 @@ class PaymentSpec extends ObjectBehavior
 
         $this->setFamilyName($long_name);
         $this->getFamilyName()->shouldBe($long_name_truncated);
+    }
+
+    function it_calculates_a_mac_from_variables()
+    {
+
     }
 
 }
