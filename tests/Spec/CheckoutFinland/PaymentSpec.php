@@ -77,4 +77,24 @@ class PaymentSpec extends ObjectBehavior
         $this->getPostOffice()->shouldBe('Some city');
     }
 
+    function it_throws_exception_when_amount_is_too_large()
+    {
+        $this->shouldThrow('CheckoutFinland\Exceptions\AmountTooLargeException')->duringSetAmount("100000000");
+    }
+
+    function it_throws_exception_when_amount_is_too_small()
+    {
+        $this->shouldThrow('CheckoutFinland\Exceptions\AmountUnderMinimumException')->duringSetAmount("10");
+    }
+
+    function it_throws_exception_when_urls_are_too_long()
+    {
+        $long_url = str_pad("http://", 301, "foo");
+
+        $this->shouldThrow('CheckoutFinland\Exceptions\UrlTooLongException')->duringSetCancelUrl($long_url);
+        $this->shouldThrow('CheckoutFinland\Exceptions\UrlTooLongException')->duringSetReturnUrl($long_url);
+        $this->shouldThrow('CheckoutFinland\Exceptions\UrlTooLongException')->duringSetDelayedUrl($long_url);
+        $this->shouldThrow('CheckoutFinland\Exceptions\UrlTooLongException')->duringSetRejectUrl($long_url);
+    }
+
 }

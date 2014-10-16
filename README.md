@@ -1,4 +1,4 @@
 CheckoutAPIClient
 =================
 
-API client class for the finnish payment gateway Checkout Finland
+API client for the finnish payment gateway Checkout Finland.

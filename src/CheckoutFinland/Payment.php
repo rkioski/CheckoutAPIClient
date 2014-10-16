@@ -1,6 +1,9 @@
 <?php
 
 namespace CheckoutFinland;
+use CheckoutFinland\Exceptions\AmountTooLargeException;
+use CheckoutFinland\Exceptions\AmountUnderMinimumException;
+use CheckoutFinland\Exceptions\UrlTooLongException;
 
 /**
  * Class Payment
@@ -10,7 +13,7 @@ class Payment
 {
 
     /**
-     * @var string Merchant id
+     * @var string Merchant id (AN 20)
      */
     protected $merchant_id;
     /**
@@ -19,105 +22,113 @@ class Payment
     protected $merchant_secret;
 
     /**
-     * @var string Payment version, currently always '0001'
+     * @var string Payment version, currently always '0001' (AN 4)
      */
     protected $version;
     /**
-     * @var string Unique identifier for the payment
+     * @var string Unique identifier for the payment (AN 20)
      */
     protected $stamp;
     /**
-     * @var string Amount of payment in cents (10€ == 1000)
+     * @var string Amount of payment in cents (10€ == 1000) (N 8)
      */
     protected $amount;
     /**
-     * @var string Reference number for the payment, recommended to be unique but not forced
+     * @var string Reference number for the payment, recommended to be unique but not forced (AN 20)
      */
     protected $reference;
     /**
-     * @var string Message/Description for the buyer (Nuts and bolts, Furniture, Cuckoo clocks)
+     * @var string Message/Description for the buyer (Nuts and bolts, Furniture, Cuckoo clocks) (AN 1000)
      */
     protected $message;
     /**
-     * @var string Language of the payment selection page/bank interface if supported. Currently supported languages include Finnish FI, Swedish SE and English EN
+     * @var string Language of the payment selection page/bank interface if supported. Currently supported languages include Finnish FI, Swedish SE and English EN (AN  2)
      */
     protected $language;
 
     /**
-     * @var string Url called when returning successfully
+     * @var string Url called when returning successfully (AN 300)
      */
     protected $return_url;
     /**
-     * @var string Url called when user cancelled payment
+     * @var string Url called when user cancelled payment (AN 300)
      */
     protected $cancel_url;
     /**
-     * @var string Url called when payment was rejected (No credit on credit card etc)
+     * @var string Url called when payment was rejected (No credit on credit card etc) (AN 300)
      */
     protected $reject_url;
     /**
-     * @var string Url called when payment is initially successful but not yet confirmed
+     * @var string Url called when payment is initially successful but not yet confirmed (AN 300)
      */
     protected $delayed_url;
 
     /**
-     * @var string Country of the buyer, affects available payment methods
+     * @var string Country of the buyer, affects available payment methods (AN 3)
      */
     protected $country;
     /**
-     * @var string Currency used in payment. Currently only EUR is supported
+     * @var string Currency used in payment. Currently only EUR is supported (AN 3)
      */
     protected $currency;
     /**
-     * @var string device or method used when creating new transaction. Affects how Checkout servers respond to posting the new payment 1 = HTML 10 = XML
+     * @var string device or method used when creating new transaction. Affects how Checkout servers respond to posting the new payment 1 = HTML 10 = XML (N 2)
      */
     protected $device;
     /**
-     * @var string Payment type or content of purchase. Used to differentiate between adult entertainment and everything else. 1 = normal, 2 = adult entertainment
+     * @var string Payment type or content of purchase. Used to differentiate between adult entertainment and everything else. 1 = normal, 2 = adult entertainment (N 2)
      */
     protected $content;
     /**
-     * @var string Type, currently always 0
+     * @var string Type, currently always 0 (N 1)
      */
     protected $type;
     /**
-     * @var string Algorithm used when calculating mac, currently = 3. 1 and 2 are still available but deprecated
+     * @var string Algorithm used when calculating mac, currently = 3. 1 and 2 are still available but deprecated (N 1)
      */
     protected $algorithm;
 
     /**
-     * @var DateTime Expected delivery date
+     * @var DateTime Expected delivery date (N 8) (Ymd)
      */
     protected $delivery_date;
     /**
-     * @var string First name of customer
+     * @var string First name of customer (AN 40)
      */
     protected $first_name;
     /**
-     * @var string Last name of customer
+     * @var string Last name of customer (AN 40)
      */
     protected $family_name;
     /**
-     * @var string Street address of customer
+     * @var string Street address of customer (AN 40)
      */
     protected $address;
     /**
-     * @var string Postcode of customer
+     * @var string Postcode of customer (AN 14)
      */
     protected $postcode;
     /**
-     * @var string Post office of customer
+     * @var string Post office of customer (AN 18)
      */
     protected $post_office;
 
     /**
+     * @var bool If true overrides the minimum allowed amount check (by default 1€ is smallest allowed amount). Do not set to true unless you have a contract with Checkout Finland that allows smaller purchases then 1€.
+     */
+    private $allow_small_purchases;
+
+    /**
      * @param $merchant_id
      * @param $merchant_secret
+     * @param $allow_small_purchases
      */
-    public function __construct($merchant_id, $merchant_secret)
+    public function __construct($merchant_id, $merchant_secret, $allow_small_purchases = false)
     {
         $this->merchant_id      = $merchant_id;
         $this->merchant_secret  = $merchant_secret;
+
+        $this->allow_small_purchases = $allow_small_purchases;
 
         $this->setDefaultValues();
     }
@@ -215,7 +226,8 @@ class Payment
      */
     public function setAddress($address)
     {
-        $this->address = $address;
+
+        $this->address = substr($address, 0, 40);
     }
 
     /**
@@ -231,7 +243,7 @@ class Payment
      */
     public function setAlgorithm($algorithm)
     {
-        $this->algorithm = $algorithm;
+        $this->algorithm = substr($algorithm, 0 , 1);
     }
 
     /**
@@ -244,9 +256,17 @@ class Payment
 
     /**
      * @param string $amount
+     * @throws AmountTooLargeException
+     * @throws AmountUnderMinimumException
      */
     public function setAmount($amount)
     {
+        if(strlen($amount) > 8 )
+            throw new AmountTooLargeException($amount ." is too large.");
+
+        if($this->allow_small_purchases == false and $amount < 100)
+            throw new AmountUnderMinimumException("1€ is the minimum allowed amount.");
+
         $this->amount = $amount;
     }
 
@@ -260,9 +280,14 @@ class Payment
 
     /**
      * @param string $cancel_url
+     * @throws UrlTooLongException
      */
     public function setCancelUrl($cancel_url)
     {
+
+        if(strlen($cancel_url) > 300)
+            throw new UrlTooLongException('Max url length is 300 characters');
+
         $this->cancel_url = $cancel_url;
     }
 
@@ -324,9 +349,13 @@ class Payment
 
     /**
      * @param string $delayed_url
+     * @throws UrlTooLongException
      */
     public function setDelayedUrl($delayed_url)
     {
+        if(strlen($delayed_url) > 300)
+            throw new UrlTooLongException('Max url length is 300 characters');
+
         $this->delayed_url = $delayed_url;
     }
 
@@ -516,9 +545,13 @@ class Payment
 
     /**
      * @param string $reject_url
+     * @throws UrlTooLongException
      */
     public function setRejectUrl($reject_url)
     {
+        if(strlen($reject_url) > 300)
+            throw new UrlTooLongException('Max url length is 300 characters');
+
         $this->reject_url = $reject_url;
     }
 
@@ -532,9 +565,13 @@ class Payment
 
     /**
      * @param string $return_url
+     * @throws UrlTooLongException
      */
     public function setReturnUrl($return_url)
     {
+        if(strlen($return_url) > 300)
+            throw new UrlTooLongException('Max url length is 300 characters');
+
         $this->return_url = $return_url;
     }
 
