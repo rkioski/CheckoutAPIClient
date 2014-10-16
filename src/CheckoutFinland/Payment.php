@@ -3,6 +3,7 @@
 namespace CheckoutFinland;
 use CheckoutFinland\Exceptions\AmountTooLargeException;
 use CheckoutFinland\Exceptions\AmountUnderMinimumException;
+use CheckoutFinland\Exceptions\CurrencyNotSupportedException;
 use CheckoutFinland\Exceptions\UrlTooLongException;
 
 /**
@@ -304,7 +305,7 @@ class Payment
      */
     public function setContent($content)
     {
-        $this->content = $content;
+        $this->content = substr($content, 0, 2);
     }
 
     /**
@@ -320,7 +321,7 @@ class Payment
      */
     public function setCountry($country)
     {
-        $this->country = $country;
+        $this->country = substr($country, 0, 3);
     }
 
     /**
@@ -333,9 +334,13 @@ class Payment
 
     /**
      * @param string $currency
+     * @throws CurrencyNotSupportedException
      */
     public function setCurrency($currency)
     {
+        if($currency != 'EUR')
+            throw new CurrencyNotSupportedException('EUR is currently the only supported currency');
+
         $this->currency = $currency;
     }
 
@@ -368,9 +373,9 @@ class Payment
     }
 
     /**
-     * @param DateTime $delivery_date
+     * @param \DateTime $delivery_date
      */
-    public function setDeliveryDate($delivery_date)
+    public function setDeliveryDate(\DateTime $delivery_date)
     {
         $this->delivery_date = $delivery_date;
     }
