@@ -13,28 +13,28 @@ class Response
 {
 
     /**
-     * @var
+     * @var string Secret merchant key
      */
     protected $merchant_secret;
 
     /**
-     * @var
+     * @var string Payment version, currently always '0001'
      */
     protected $version;
     /**
-     * @var
+     * @var string Unique identifier for the payment, set by merchant when creating new payment
      */
     protected $stamp;
     /**
-     * @var
+     * @var string Reference number for the payment, set by merchant when creating new payment, recommended to be unique but not forced
      */
     protected $reference;
     /**
-     * @var
+     * @var string Archive id/Unique id for the payment, set by Checkout Finland
      */
     protected $payment;
     /**
-     * @var
+     * @var integer
      */
     protected $status;
     /**

@@ -45,7 +45,7 @@ class ResponseSpec extends ObjectBehavior
         $this->setRequestParams($this->valid_response_params);
     }
 
-    function it_returns_true_when_given_valid_request_parameters()
+    function it_returns_true_on_validation_when_given_valid_request_parameters()
     {
         $this->setRequestParams($this->valid_response_params);
 
@@ -67,5 +67,33 @@ class ResponseSpec extends ObjectBehavior
         $this->setRequestParams($params);
 
         $this->shouldThrow('CheckoutFinland\Exceptions\UnsupportedAlgorithmException')->duringValidate();
+    }
+
+    function its_variables_are_all_accessible_trough_setters_and_getters()
+    {
+        $this->setAlgorithm(3);
+        $this->getAlgorithm()->shouldBe(3);
+
+        $this->setMac('1234567890');
+        $this->getMac()->shouldBe('1234567890');
+
+        $this->setMerchantSecret('secret');
+        $this->getMerchantSecret()->shouldBe('secret');
+
+        $this->setPayment('1234');
+        $this->getPayment()->shouldBe('1234');
+
+        $this->setReference('54321');
+        $this->getReference()->shouldBe('54321');
+
+        $this->setStamp('1234');
+        $this->getStamp()->shouldBe('1234');
+
+        $this->setStatus(2);
+        $this->getStatus()->shouldBe(2);
+
+        $this->setVersion(3);
+        $this->getVersion()->shouldBe(3);
+
     }
 }
