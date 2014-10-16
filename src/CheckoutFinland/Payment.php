@@ -5,6 +5,7 @@ use CheckoutFinland\Exceptions\AmountTooLargeException;
 use CheckoutFinland\Exceptions\AmountUnderMinimumException;
 use CheckoutFinland\Exceptions\CurrencyNotSupportedException;
 use CheckoutFinland\Exceptions\UrlTooLongException;
+use CheckoutFinland\Exceptions\VariableTooLongException;
 
 /**
  * Class Payment
@@ -90,7 +91,7 @@ class Payment
     protected $algorithm;
 
     /**
-     * @var DateTime Expected delivery date (N 8) (Ymd)
+     * @var \DateTime Expected delivery date (N 8) (Ymd)
      */
     protected $delivery_date;
     /**
@@ -365,7 +366,7 @@ class Payment
     }
 
     /**
-     * @return DateTime
+     * @return \DateTime
      */
     public function getDeliveryDate()
     {
@@ -393,7 +394,7 @@ class Payment
      */
     public function setDevice($device)
     {
-        $this->device = $device;
+        $this->device = substr($device, 0, 2);
     }
 
     /**
@@ -409,7 +410,7 @@ class Payment
      */
     public function setFamilyName($family_name)
     {
-        $this->family_name = $family_name;
+        $this->family_name = substr($family_name, 0, 40);
     }
 
     /**
@@ -425,7 +426,7 @@ class Payment
      */
     public function setFirstName($first_name)
     {
-        $this->first_name = $first_name;
+        $this->first_name = substr($first_name, 0, 40);
     }
 
     /**
@@ -441,7 +442,7 @@ class Payment
      */
     public function setLanguage($language)
     {
-        $this->language = $language;
+        $this->language = substr($language, 0, 2);
     }
 
     /**
@@ -454,9 +455,13 @@ class Payment
 
     /**
      * @param string $merchant_id
+     * @throws VariableTooLongException
      */
     public function setMerchantId($merchant_id)
     {
+        if(strlen($merchant_id) > 20 )
+            throw new VariableTooLongException("Merchant id: $merchant_id too long, max length is 20 characters");
+
         $this->merchant_id = $merchant_id;
     }
 
@@ -489,7 +494,7 @@ class Payment
      */
     public function setMessage($message)
     {
-        $this->message = $message;
+        $this->message = substr($message, 0, 1000);
     }
 
     /**
@@ -505,7 +510,7 @@ class Payment
      */
     public function setPostOffice($post_office)
     {
-        $this->post_office = $post_office;
+        $this->post_office = substr($post_office, 0, 18);
     }
 
     /**
@@ -521,7 +526,7 @@ class Payment
      */
     public function setPostcode($postcode)
     {
-        $this->postcode = $postcode;
+        $this->postcode = substr($postcode, 0, 14);
     }
 
     /**
@@ -534,9 +539,13 @@ class Payment
 
     /**
      * @param string $reference
+     * @throws VariableTooLongException
      */
     public function setReference($reference)
     {
+        if(strlen($reference) > 20)
+            throw new VariableTooLongException("Reference: $reference too long, max length is 20 characters.");
+
         $this->reference = $reference;
     }
 
@@ -590,9 +599,13 @@ class Payment
 
     /**
      * @param string $stamp
+     * @throws VariableTooLongException
      */
     public function setStamp($stamp)
     {
+        if(strlen($stamp) > 20)
+            throw new VariableTooLongException("Stamp: $stamp too long, max length is 20 characters.");
+
         $this->stamp = $stamp;
     }
 
@@ -609,7 +622,7 @@ class Payment
      */
     public function setType($type)
     {
-        $this->type = $type;
+        $this->type = substr($type, 0, 1);
     }
 
     /**
@@ -625,7 +638,7 @@ class Payment
      */
     public function setVersion($version)
     {
-        $this->version = $version;
+        $this->version = substr($version, 0, 4);
     }
 
 
