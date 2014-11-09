@@ -8,4 +8,9 @@ class Client
     {
 
     }
+
+    public funtion sendPayment(Payment $payment)
+    {
+
+    }
 }
