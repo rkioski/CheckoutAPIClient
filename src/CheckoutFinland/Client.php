@@ -9,7 +9,7 @@ class Client
 
     }
 
-    public funtion sendPayment(Payment $payment)
+    public function sendPayment(Payment $payment)
     {
 
     }
