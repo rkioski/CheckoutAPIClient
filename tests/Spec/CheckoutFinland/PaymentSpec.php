@@ -97,6 +97,17 @@ class PaymentSpec extends ObjectBehavior
         $this->shouldThrow('CheckoutFinland\Exceptions\UrlTooLongException')->duringSetRejectUrl($long_url);
     }
 
+    function it_can_set_all_return_urls_at_once()
+    {
+        $url = 'www.return.url';
+        $this->setUrls($url);
+
+        $this->getReturnUrl()->shouldBe($url);
+        $this->getCancelUrl()->shouldBe($url);
+        $this->getDelayedUrl()->shouldBe($url);
+        $this->getRejectUrl()->shouldBe($url);
+    }
+
     function it_throws_exceptions_when_trying_to_set_too_long_variables_to_critical_fields()
     {
         $long_string = str_pad('foo', 21, 'o');
@@ -120,7 +131,64 @@ class PaymentSpec extends ObjectBehavior
 
     function it_calculates_a_mac_from_variables()
     {
+        $payment_data = [
+            'version'           => '0001',
+            'stamp'             => '1245132',
+            'amount'            => '1000',
+            'reference'         => '12344',
+            'message'           => 'Nuts and bolts',
+            'language'          => 'EN',
+            'merchant'          => $this->demo_merchant_id,
+            'returnUrl'         => 'www.someurl.com',
+            'cancelUrl'         => 'www.someurl.com',
+            'rejectUrl'         => 'www.someurl.com',
+            'delayedUrl'        => 'www.someurl.com',
+            'country'           => 'FIN',
+            'currency'          => 'EUR',
+            'device'            => '10',
+            'content'           => '1',
+            'type'              => '0',
+            'algorithm'         => '3',
+            'deliveryDate'      => '20141005',
+            'firstName'         => 'John',
+            'familyName'        => 'Doe',
+            'address'           => 'Some street 13 B 2',
+            'postcode'          => '33100',
+            'postOffice'        => 'Some city',
+            
+        ];
 
+        $mac_string = '';
+        
+        foreach ($payment_data as $value) {
+            $mac_string .= "$value+";
+        }
+
+        $mac_string .= $this->demo_merchant_secret;
+
+        $expected_mac = strtoupper(md5($mac_string));
+
+        $this->setUrls('www.someurl.com');
+
+        $this->setOrderData(
+            $payment_data['stamp'], 
+            $payment_data['amount'], 
+            $payment_data['reference'], 
+            $payment_data['message'], 
+            new \DateTime('2014-10-05')
+        );
+
+        $this->setCustomerData(
+            $payment_data['firstName'], 
+            $payment_data['familyName'], 
+            $payment_data['address'], 
+            $payment_data['postcode'], 
+            $payment_data['postOffice'], 
+            $payment_data['country'], 
+            $payment_data['language']
+        );
+
+        $this->calculateMac()->shouldBe($expected_mac);
     }
 
 }

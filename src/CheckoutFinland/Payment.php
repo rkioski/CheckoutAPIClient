@@ -143,6 +143,8 @@ class Payment
         $this->type         = '0';
         $this->algorithm    = '3';
         $this->currency     = 'EUR';
+
+        return $this;
     }
 
     /**
@@ -161,6 +163,8 @@ class Payment
         $this->setReference($reference);
         $this->setMessage($message);
         $this->setDeliveryDate($deliveryDate);
+
+        return $this;
     }
 
     /**
@@ -183,6 +187,8 @@ class Payment
         $this->setPostOffice($postOffice);
         $this->setCountry($country);
         $this->setLanguage($language);
+
+        return $this;
     }
 
     /**
@@ -215,6 +221,60 @@ class Payment
                 $this->$setter_name($value);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * Set all response urls as the same return url.
+     *
+     * @param string $returnUrl
+     * @throws UrlTooLongException
+     */
+    public function setUrls($returnUrl)
+    {
+        $this->setReturnUrl($returnUrl);
+        $this->setCancelUrl($returnUrl);
+        $this->setDelayedUrl($returnUrl);
+        $this->setRejectUrl($returnUrl);   
+
+        return $this;
+    }
+
+    /**
+    *   Calculates MAC string from all variables in the class
+    *
+    *   @return string
+    */
+    public function calculateMac()
+    {
+        $mac_string = $this->getVersion();
+        
+        $mac_string .= '+' .$this->getStamp();
+        $mac_string .= '+' .$this->getAmount();
+        $mac_string .= '+' .$this->getReference();
+        $mac_string .= '+' .$this->getMessage();
+        $mac_string .= '+' .$this->getLanguage();
+        $mac_string .= '+' .$this->getMerchantId();
+        $mac_string .= '+' .$this->getReturnUrl();
+        $mac_string .= '+' .$this->getCancelUrl();
+        $mac_string .= '+' .$this->getRejectUrl();
+        $mac_string .= '+' .$this->getDelayedUrl();
+        $mac_string .= '+' .$this->getCountry();
+        $mac_string .= '+' .$this->getCurrency();
+        $mac_string .= '+' .$this->getDevice();
+        $mac_string .= '+' .$this->getContent();
+        $mac_string .= '+' .$this->getType();
+        $mac_string .= '+' .$this->getAlgorithm();
+        $mac_string .= '+' .$this->getDeliveryDate()->format('Ymd');
+        $mac_string .= '+' .$this->getFirstName();
+        $mac_string .= '+' .$this->getFamilyName();
+        $mac_string .= '+' .$this->getAddress();
+        $mac_string .= '+' .$this->getPostcode();
+        $mac_string .= '+' .$this->getPostOffice();
+        $mac_string .= '+' .$this->getMerchantSecret();
+
+        return strtoupper(md5($mac_string));
     }
 
     /**
@@ -232,6 +292,8 @@ class Payment
     {
 
         $this->address = substr($address, 0, 40);
+
+        return $this;
     }
 
     /**
@@ -248,6 +310,8 @@ class Payment
     public function setAlgorithm($algorithm)
     {
         $this->algorithm = substr($algorithm, 0 , 1);
+
+        return $this;
     }
 
     /**
@@ -272,6 +336,8 @@ class Payment
             throw new AmountUnderMinimumException("1€ is the minimum allowed amount.");
 
         $this->amount = $amount;
+
+        return $this;
     }
 
     /**
@@ -293,6 +359,8 @@ class Payment
             throw new UrlTooLongException('Max url length is 300 characters');
 
         $this->cancelUrl = $cancelUrl;
+
+        return $this;
     }
 
     /**
@@ -309,6 +377,8 @@ class Payment
     public function setContent($content)
     {
         $this->content = substr($content, 0, 2);
+
+        return $this;
     }
 
     /**
@@ -325,6 +395,8 @@ class Payment
     public function setCountry($country)
     {
         $this->country = substr($country, 0, 3);
+
+        return $this;
     }
 
     /**
@@ -345,6 +417,8 @@ class Payment
             throw new CurrencyNotSupportedException('EUR is currently the only supported currency');
 
         $this->currency = $currency;
+
+        return $this;
     }
 
     /**
@@ -365,6 +439,8 @@ class Payment
             throw new UrlTooLongException('Max url length is 300 characters');
 
         $this->delayedUrl = $delayedUrl;
+
+        return $this;
     }
 
     /**
@@ -373,6 +449,8 @@ class Payment
     public function getDeliveryDate()
     {
         return $this->deliveryDate;
+
+        return $this;
     }
 
     /**
@@ -381,6 +459,8 @@ class Payment
     public function setDeliveryDate(\DateTime $deliveryDate)
     {
         $this->deliveryDate = $deliveryDate;
+
+        return $this;
     }
 
     /**
@@ -397,6 +477,8 @@ class Payment
     public function setDevice($device)
     {
         $this->device = substr($device, 0, 2);
+
+        return $this;
     }
 
     /**
@@ -413,6 +495,8 @@ class Payment
     public function setFamilyName($familyName)
     {
         $this->familyName = substr($familyName, 0, 40);
+
+        return $this;
     }
 
     /**
@@ -429,6 +513,8 @@ class Payment
     public function setFirstName($firstName)
     {
         $this->firstName = substr($firstName, 0, 40);
+
+        return $this;
     }
 
     /**
@@ -445,6 +531,8 @@ class Payment
     public function setLanguage($language)
     {
         $this->language = substr($language, 0, 2);
+
+        return $this;
     }
 
     /**
@@ -465,6 +553,8 @@ class Payment
             throw new VariableTooLongException("Merchant id: $merchantId too long, max length is 20 characters");
 
         $this->merchantId = $merchantId;
+
+        return $this;
     }
 
     /**
@@ -481,6 +571,8 @@ class Payment
     public function setMerchantSecret($merchantSecret)
     {
         $this->merchantSecret = $merchantSecret;
+
+        return $this;
     }
 
     /**
@@ -497,6 +589,8 @@ class Payment
     public function setMessage($message)
     {
         $this->message = substr($message, 0, 1000);
+
+        return $this;
     }
 
     /**
@@ -513,6 +607,8 @@ class Payment
     public function setPostOffice($postOffice)
     {
         $this->postOffice = substr($postOffice, 0, 18);
+
+        return $this;
     }
 
     /**
@@ -529,6 +625,8 @@ class Payment
     public function setPostcode($postcode)
     {
         $this->postcode = substr($postcode, 0, 14);
+
+        return $this;
     }
 
     /**
@@ -549,6 +647,8 @@ class Payment
             throw new VariableTooLongException("Reference: $reference too long, max length is 20 characters.");
 
         $this->reference = $reference;
+
+        return $this;
     }
 
     /**
@@ -569,6 +669,8 @@ class Payment
             throw new UrlTooLongException('Max url length is 300 characters');
 
         $this->rejectUrl = $rejectUrl;
+
+        return $this;
     }
 
     /**
@@ -589,6 +691,8 @@ class Payment
             throw new UrlTooLongException('Max url length is 300 characters');
 
         $this->returnUrl = $returnUrl;
+
+        return $this;
     }
 
     /**
@@ -609,6 +713,8 @@ class Payment
             throw new VariableTooLongException("Stamp: $stamp too long, max length is 20 characters.");
 
         $this->stamp = $stamp;
+
+        return $this;
     }
 
     /**
@@ -625,6 +731,8 @@ class Payment
     public function setType($type)
     {
         $this->type = substr($type, 0, 1);
+
+        return $this;
     }
 
     /**
@@ -641,9 +749,7 @@ class Payment
     public function setVersion($version)
     {
         $this->version = substr($version, 0, 4);
+
+        return $this;
     }
-
-
-
-
 }

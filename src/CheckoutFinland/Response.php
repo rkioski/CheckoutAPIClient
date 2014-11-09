@@ -38,11 +38,11 @@ class Response
      */
     protected $status;
     /**
-     * @var
+     * @var integer
      */
     protected $algorithm;
     /**
-     * @var
+     * @var string
      */
     protected $mac;
 
@@ -75,6 +75,8 @@ class Response
         } else {
             throw new MacMismatchException();
         }
+
+        return false;
     }
 
     /**
@@ -91,6 +93,8 @@ class Response
         $this->status       = isset($params['STATUS']) ? $params['STATUS'] : null;
         $this->algorithm    = isset($params['ALGORITHM']) ? $params['ALGORITHM'] : null;
         $this->mac          = isset($params['MAC']) ? $params['MAC'] : null;
+
+        return $this;
     }
 
     /**
@@ -107,6 +111,8 @@ class Response
     public function setAlgorithm($algorithm)
     {
         $this->algorithm = $algorithm;
+
+        return $this;
     }
 
     /**
@@ -123,6 +129,8 @@ class Response
     public function setMac($mac)
     {
         $this->mac = $mac;
+
+        return $this;
     }
 
     /**
@@ -139,6 +147,8 @@ class Response
     public function setMerchantSecret($merchant_secret)
     {
         $this->merchant_secret = $merchant_secret;
+
+        return $this;
     }
 
     /**
@@ -155,6 +165,8 @@ class Response
     public function setPayment($payment)
     {
         $this->payment = $payment;
+
+        return $this;
     }
 
     /**
@@ -171,6 +183,8 @@ class Response
     public function setReference($reference)
     {
         $this->reference = $reference;
+
+        return $this;
     }
 
     /**
@@ -187,6 +201,8 @@ class Response
     public function setStamp($stamp)
     {
         $this->stamp = $stamp;
+
+        return $this;
     }
 
     /**
@@ -203,6 +219,8 @@ class Response
     public function setStatus($status)
     {
         $this->status = $status;
+
+        return $this;
     }
 
     /**
@@ -219,7 +237,7 @@ class Response
     public function setVersion($version)
     {
         $this->version = $version;
+
+        return $this;
     }
-
-
 }
