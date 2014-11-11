@@ -135,6 +135,9 @@ class Payment
         $this->setDefaultValues();
     }
 
+    /**
+     * @return $this
+     */
     private function setDefaultValues()
     {
         $this->version      = '0001';
@@ -155,6 +158,7 @@ class Payment
      * @param $reference
      * @param $message
      * @param \DateTime $deliveryDate
+     * @return $this
      */
     public function setOrderData($stamp, $amount, $reference, $message, \DateTime $deliveryDate)
     {
@@ -177,6 +181,7 @@ class Payment
      * @param $postOffice
      * @param $country
      * @param $language
+     * @return $this
      */
     public function setCustomerData($firstName, $familyName, $address, $postcode, $postOffice, $country, $language)
     {
@@ -210,6 +215,7 @@ class Payment
      *   ];
      *
      * @param array $params
+     * @return $this
      */
     public function setData(array $params)
     {
@@ -230,6 +236,7 @@ class Payment
      *
      * @param string $returnUrl
      * @throws UrlTooLongException
+     * @return $this
      */
     public function setUrls($returnUrl)
     {
@@ -287,6 +294,7 @@ class Payment
 
     /**
      * @param string $address
+     * @return $this
      */
     public function setAddress($address)
     {
@@ -306,6 +314,7 @@ class Payment
 
     /**
      * @param string $algorithm
+     * @return $this
      */
     public function setAlgorithm($algorithm)
     {
@@ -326,6 +335,7 @@ class Payment
      * @param string $amount
      * @throws AmountTooLargeException
      * @throws AmountUnderMinimumException
+     * @return $this
      */
     public function setAmount($amount)
     {
@@ -351,6 +361,7 @@ class Payment
     /**
      * @param string $cancelUrl
      * @throws UrlTooLongException
+     * @return $this
      */
     public function setCancelUrl($cancelUrl)
     {
@@ -373,6 +384,7 @@ class Payment
 
     /**
      * @param string $content
+     * @return $this
      */
     public function setContent($content)
     {
@@ -391,6 +403,7 @@ class Payment
 
     /**
      * @param string $country
+     * @return $this
      */
     public function setCountry($country)
     {
@@ -410,6 +423,7 @@ class Payment
     /**
      * @param string $currency
      * @throws CurrencyNotSupportedException
+     * @return $this
      */
     public function setCurrency($currency)
     {
@@ -432,6 +446,7 @@ class Payment
     /**
      * @param string $delayedUrl
      * @throws UrlTooLongException
+     * @return $this
      */
     public function setDelayedUrl($delayedUrl)
     {
@@ -444,6 +459,7 @@ class Payment
     }
 
     /**
+     * @param $format
      * @return \DateTime
      */
     public function getDeliveryDate($format = null)
@@ -457,6 +473,7 @@ class Payment
 
     /**
      * @param \DateTime $deliveryDate
+     * @return $this
      */
     public function setDeliveryDate(\DateTime $deliveryDate)
     {
@@ -475,6 +492,7 @@ class Payment
 
     /**
      * @param string $device
+     * @return $this
      */
     public function setDevice($device)
     {
@@ -493,6 +511,7 @@ class Payment
 
     /**
      * @param string $familyName
+     * @return $this
      */
     public function setFamilyName($familyName)
     {
@@ -511,6 +530,7 @@ class Payment
 
     /**
      * @param string $firstName
+     * @return $this
      */
     public function setFirstName($firstName)
     {
@@ -529,6 +549,7 @@ class Payment
 
     /**
      * @param string $language
+     * @return $this
      */
     public function setLanguage($language)
     {
@@ -548,6 +569,7 @@ class Payment
     /**
      * @param string $merchantId
      * @throws VariableTooLongException
+     * @return $this
      */
     public function setMerchantId($merchantId)
     {
@@ -569,6 +591,7 @@ class Payment
 
     /**
      * @param string $merchantSecret
+     * @return $this
      */
     public function setMerchantSecret($merchantSecret)
     {
@@ -587,6 +610,7 @@ class Payment
 
     /**
      * @param string $message
+     * @return $this
      */
     public function setMessage($message)
     {
@@ -605,6 +629,7 @@ class Payment
 
     /**
      * @param string $postOffice
+     * @return $this
      */
     public function setPostOffice($postOffice)
     {
@@ -623,6 +648,7 @@ class Payment
 
     /**
      * @param string $postcode
+     * @return $this
      */
     public function setPostcode($postcode)
     {
@@ -642,6 +668,7 @@ class Payment
     /**
      * @param string $reference
      * @throws VariableTooLongException
+     * @return $this
      */
     public function setReference($reference)
     {
@@ -664,6 +691,7 @@ class Payment
     /**
      * @param string $rejectUrl
      * @throws UrlTooLongException
+     * @return $this
      */
     public function setRejectUrl($rejectUrl)
     {
@@ -686,6 +714,7 @@ class Payment
     /**
      * @param string $returnUrl
      * @throws UrlTooLongException
+     * @return $this
      */
     public function setReturnUrl($returnUrl)
     {
@@ -708,6 +737,7 @@ class Payment
     /**
      * @param string $stamp
      * @throws VariableTooLongException
+     * @return $this
      */
     public function setStamp($stamp)
     {
@@ -729,6 +759,7 @@ class Payment
 
     /**
      * @param string $type
+     * @return $this
      */
     public function setType($type)
     {
@@ -747,6 +778,7 @@ class Payment
 
     /**
      * @param string $version
+     * @return $this
      */
     public function setVersion($version)
     {
