@@ -446,11 +446,13 @@ class Payment
     /**
      * @return \DateTime
      */
-    public function getDeliveryDate()
+    public function getDeliveryDate($format = null)
     {
-        return $this->deliveryDate;
+        if($format)
+            return $this->deliveryDate->format($format);
+        else
+            return $this->deliveryDate;
 
-        return $this;
     }
 
     /**
