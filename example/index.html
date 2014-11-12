@@ -1,0 +1,62 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/pure-min.css">
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.5.0/grids-responsive-min.css">
+    <!--<![endif]-->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout Finland API example</title>
+</head>
+
+<body>
+
+    <div class="content">
+        <form class="pure-form pure-form-stacked" method="post" action="checkout.php">
+            <fieldset>
+                <legend>Dummy example cart</legend>
+                    <div class="pure-g">
+
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="first-name">First name</label>
+                            <input type="text" name="first-name" value="John"/>
+                        </div>
+
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="last-name">Last name</label>
+                            <input type="text" name="last-name" value="Doe" />
+                        </div>
+
+                        <div class="pure-u1 pure-u-md-1-3">
+                            <label for="amount">Amount €</label>
+                            <input type="text" name="amount" value="10" />
+                        </div>
+
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="first-name">Street address</label>
+                            <input type="text" name="address" value="Somestreet 21 B" />
+                        </div>
+
+                        <div class="pure-u-1 pure-u-md-2-3">
+                            <label for="first-name">Post office</label>
+                            <input type="text" name="post-office" value="SomeOffice" />
+                        </div>
+
+                        <div class="pure-u-1 pure-u-md-1-3">
+                            <label for="first-name">Zip code</label>
+                            <input type="text" name="zip-code" value="12345" />
+                        </div>
+                    </div>
+                     <button type="submit" class="pure-button pure-button-primary">Checkout</button>
+            </fieldset>
+
+        </form>
+    </div>
+</body>
+</html>
