@@ -2,13 +2,20 @@
 
 namespace CheckoutFinland;
 
+/**
+ * Class Client
+ * @package CheckoutFinland
+ */
 class Client
 {
-    public function __construct()
-    {
 
-    }
-
+    /**
+     * Builds an array that can be passed to Checkout Finland as POST parameters. Sends the data. Returns the response body
+     * that contains payment options xml or error message.
+     *
+     * @param Payment $payment
+     * @throws \Exception
+     */
     public function sendPayment(Payment $payment)
     {
         $postData = [
@@ -40,6 +47,13 @@ class Client
         return $this->postData("https://payment.checkout.fi", $postData);
     }
 
+    /**
+     * Posts data, tries to use stream context if allow_url_fopen is on in php.ini or CURL if not. If neither option is available throws exception.
+     *
+     * @param $url
+     * @param $postData
+     * @throws \Exception
+     */
     private function postData($url, $postData)
     {
         if(ini_get('allow_url_fopen'))
@@ -76,7 +90,7 @@ class Client
         }
         else 
         {
-            throw new Exception("No valid method to post data. Set allow_url_fopen setting to On in php.ini file or install curl extension.");
+            throw new \Exception("No valid method to post data. Set allow_url_fopen setting to On in php.ini file or install curl extension.");
         }
     }
 }
