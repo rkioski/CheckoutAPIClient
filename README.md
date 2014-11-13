@@ -75,7 +75,7 @@ header('Location: '.$response_xml->paymentURL);
 
 Handling return
 ```php
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 
 use CheckoutFinland\Response;
 
