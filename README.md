@@ -14,6 +14,8 @@ The following versions of PHP are supported:
 * PHP 5.5
 * PHP 5.6
 * HHVM
+
+Requires:
 * cURL or allow_url_fopen = On in php.ini
 
 Client will try to send an HTTP POST by using PHP stream context with file_get_contents() or if that fails it will check if cURL extension is installed and try to use that instead.
