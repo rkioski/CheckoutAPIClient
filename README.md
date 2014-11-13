@@ -31,7 +31,7 @@ composer require rkioski/checkout-finland-api-client dev-master
 Take a look at the example folder for a full working example.
 
 Creating payment
-```
+```php
 require 'vendor/autoload.php';
 
 use CheckoutFinland\Payment;
@@ -74,7 +74,7 @@ header('Location: '.$response_xml->paymentURL);
 ```
 
 Handling return
-```
+```php
 require '../vendor/autoload.php';
 
 use CheckoutFinland\Response;
