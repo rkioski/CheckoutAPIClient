@@ -12,10 +12,11 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "phpspec/phpspec": "2.0.1"
-
+        "php": ">=5.4"
     },
+    "require-dev": {
+        "phpspec/phpspec": "2.0.1"
+    }
     "autoload": {
         "psr-4": {
             "CheckoutFinland\\": "src/CheckoutFinland"
