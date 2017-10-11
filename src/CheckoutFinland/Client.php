@@ -15,6 +15,7 @@ class Client
      *
      * @param Payment $payment
      * @throws \Exception
+     * @return string
      */
     public function sendPayment(Payment $payment)
     {
@@ -49,11 +50,38 @@ class Client
     }
 
     /**
+     * Poll payment, returns with xml containing payment info or error message
+     *
+     * @param Poll $poll
+     * @return string
+     */
+    public function poll(Poll $poll)
+    {
+        $postData = [
+            'VERSION'   => $poll->getVersion(),
+            'STAMP'     => $poll->getStamp(),
+            'REFERENCE' => $poll->getReference(),
+            'MERCHANT'  => $poll->getMerchantId(),
+            'AMOUNT'    => $poll->getAmount(),
+            'CURRENCY'  => $poll->getCurrency(),
+            'FORMAT'    => $poll->getFormat(),
+            'ALGORITHM' => $poll->getAlgorithm(),
+            'MAC'       => $poll->calculateMac()
+        ];
+
+        return $this->postData('https://rpcapi.checkout.fi/poll2', $postData);
+
+    }
+
+
+
+    /**
      * Posts data, tries to use stream context if allow_url_fopen is on in php.ini or CURL if not. If neither option is available throws exception.
      *
      * @param $url
      * @param $postData
      * @throws \Exception
+     * @return string
      */
     private function postData($url, $postData)
     {

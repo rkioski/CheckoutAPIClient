@@ -460,7 +460,7 @@ class Payment
 
     /**
      * @param $format
-     * @return \DateTime
+     * @return mixed
      */
     public function getDeliveryDate($format = null)
     {

@@ -77,6 +77,7 @@ try {
 <body>
     <div style="max-width:800px; margin:auto;">
         <h2>Status of payment: <?php echo $status_string; ?></h2>
+        <p><a href="<?php echo "poll.php?STAMP={$_GET['STAMP']}&REFERENCE={$_GET['REFERENCE']}&AMOUNT={$_GET['a']}" ?>">Poll the payment</a></p>
         <p><a href="index.html">Back to cart</a></p>
     </div>
 </body>

@@ -9,7 +9,7 @@ use CheckoutFinland\Client;
 
 $demo_merchant_id       = "375917";
 $demo_merchant_secret   = "SAIPPUAKAUPPIAS";
-$return_url             = 'http://' .$_SERVER['SERVER_NAME'] .str_replace('checkout.php', 'return.php', $_SERVER['REQUEST_URI']);
+$return_url             = 'http://' .$_SERVER['SERVER_NAME'] .str_replace('checkout.php', 'return.php', $_SERVER['REQUEST_URI']) ."?a=" .$_POST['amount'] * 100; // this a in return is just to easily poll payment after creating it
 
 $payment = new  Payment($demo_merchant_id, $demo_merchant_secret);
 $payment->setUrls($return_url);
